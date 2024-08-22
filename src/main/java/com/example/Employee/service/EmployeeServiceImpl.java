@@ -1,12 +1,14 @@
 package com.example.Employee.service;
 
 import com.example.Employee.entity.Employee;
+import com.example.Employee.exception.ResourceNotFoundException;
 import com.example.Employee.repository.EmployeeRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 
 @Service
@@ -22,8 +24,15 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public Employee getEmployeeById(Long id) {
-        return employeeRepository.findById(id).get();
+    public Employee getEmployeeById(Long id) throws ResourceNotFoundException {
+
+        Optional<Employee> byId = employeeRepository.findById(id);
+        if(!byId.isPresent()){
+            throw new ResourceNotFoundException("ID doesn't Exists");
+        }
+        else{
+            return byId.get();
+        }
     }
 
     @Override
