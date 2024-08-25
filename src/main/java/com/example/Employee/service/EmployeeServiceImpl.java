@@ -4,6 +4,7 @@ import com.example.Employee.entity.Employee;
 import com.example.Employee.exception.ResourceNotFoundException;
 import com.example.Employee.repository.EmployeeRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 
 @Service
+@Slf4j
 public class EmployeeServiceImpl implements EmployeeService{
 
     @Autowired
@@ -22,6 +24,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional
     public Employee createEmployee(Employee employee) {
+        log.info("Creating employee: {}", employee);
         return employeeRepository.save(employee);
     }
 
@@ -29,6 +32,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Transactional
     public Employee getEmployeeById(Long id) throws ResourceNotFoundException {
 
+        log.info("Fetching employee with id: {}", id);
         Optional<Employee> byId = employeeRepository.findById(id);
         if(!byId.isPresent()){
             throw new ResourceNotFoundException("ID doesn't Exists");
@@ -41,12 +45,14 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Override
     @Transactional
     public List<Employee> getAllEmployees() {
+        log.info("Fetching all employees");
         return employeeRepository.findAll();
     }
 
     @Override
     @Transactional
     public Employee updateEmployee(Long id, Employee employee) {
+        log.info("Updating employee with id: {}", id);
         Employee byId = employeeRepository.findById(id).get();
         if(byId == null){
             return null;
@@ -83,6 +89,7 @@ public class EmployeeServiceImpl implements EmployeeService{
     @Transactional
 
     public void deleteEmployee(Long id) {
+        log.info("Deleting employee with id: {}", id);
         employeeRepository.deleteById(id);
     }
 }
