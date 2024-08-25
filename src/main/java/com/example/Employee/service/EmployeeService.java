@@ -3,6 +3,7 @@ package com.example.Employee.service;
 import com.example.Employee.entity.Employee;
 import com.example.Employee.exception.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,4 +21,5 @@ public interface EmployeeService {
     public void deleteEmployee(Long id);
 
 
+    public void uploadEmployeeData(MultipartFile file) throws Exception;
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -21,6 +22,17 @@ public class EmployeeController {
     @Autowired
     EmployeeService employeeService;
 
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadFile(MultipartFile file){
+        log.info("Received request to upload file : {}",file.getOriginalFilename());
+        try{
+            employeeService.uploadEmployeeData(file);
+            return new ResponseEntity<>("File uploaded successfuly",HttpStatus.OK);
+        }catch (Exception e){
+            log.error("Error uploading file : {} ",e.getMessage());
+            return  new ResponseEntity<>("Failed to upload file",HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/register")
     public ResponseEntity<Employee> createEmployee(@Valid @RequestBody Employee employee) {
