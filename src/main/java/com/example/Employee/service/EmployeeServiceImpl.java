@@ -3,6 +3,7 @@ package com.example.Employee.service;
 import com.example.Employee.entity.Employee;
 import com.example.Employee.exception.ResourceNotFoundException;
 import com.example.Employee.repository.EmployeeRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,11 +20,13 @@ public class EmployeeServiceImpl implements EmployeeService{
 
 
     @Override
+    @Transactional
     public Employee createEmployee(Employee employee) {
         return employeeRepository.save(employee);
     }
 
     @Override
+    @Transactional
     public Employee getEmployeeById(Long id) throws ResourceNotFoundException {
 
         Optional<Employee> byId = employeeRepository.findById(id);
@@ -36,13 +39,18 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
+    @Transactional
     public List<Employee> getAllEmployees() {
         return employeeRepository.findAll();
     }
 
     @Override
+    @Transactional
     public Employee updateEmployee(Long id, Employee employee) {
         Employee byId = employeeRepository.findById(id).get();
+        if(byId == null){
+            return null;
+        }
 
         if(Objects.nonNull(byId.getFirstName()) &&
             !"".equalsIgnoreCase(byId.getFirstName())){
@@ -72,6 +80,8 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
+    @Transactional
+
     public void deleteEmployee(Long id) {
         employeeRepository.deleteById(id);
     }
